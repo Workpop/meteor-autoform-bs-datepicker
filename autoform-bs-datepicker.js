@@ -3,12 +3,24 @@
 AutoForm.addInputType("bootstrap-datepicker", {
   template: "afBootstrapDatepicker",
   valueOut: function () {
+    // BEGIN WORKPOP EDIT - alexcorre
+    //
+    // This is a hardcoded, hacky, and inflexible workaround for this issue:
+    // https://github.com/aldeed/meteor-autoform-bs-datepicker/issues/45
+    //
+    // High level, we make the text input value win over the selected value
+    // in the datepicker itself in all cases. We ASSUME that the `format` option
+    // configured on the datepicker is the default value. When `forceParse`
+    // datepicker option is set to false the text input value may differ from
+    // the value selected in the picker, which can lead to the bug described in
+    // the issue above.
     if (this.val()) {
       if (!/^\d{2}\/\d{2}\/\d{4}$/.test(this.val())) {
         return;
       }
       return moment(this.val(), 'MM/DD/YYYY').toDate();
     }
+    // END WORKPOP EDIT
   },
   valueConverters: {
     "string": function (val) {
