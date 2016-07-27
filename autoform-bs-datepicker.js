@@ -4,8 +4,10 @@ AutoForm.addInputType("bootstrap-datepicker", {
   template: "afBootstrapDatepicker",
   valueOut: function () {
     if (this.val()) {
-      var val = this.datepicker('getUTCDate');
-      return (val instanceof Date) ? val : this.val();
+      if (!/^\d{2}\/\d{2}\/\d{4}$/.test(this.val())) {
+        return;
+      }
+      return moment(this.val(), 'MM/DD/YYYY').toDate();
     }
   },
   valueConverters: {
